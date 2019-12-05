@@ -20,6 +20,8 @@ namespace NumberGenerator.Logic
         private const int RANDOM_MIN_VALUE = 1;
         private const int RANDOM_MAX_VALUE = 1000;
 
+        IList<IObserver> _observers = new List<IObserver>();
+
         #endregion
 
         #region Fields
@@ -28,7 +30,7 @@ namespace NumberGenerator.Logic
         #endregion
 
         #region Constructors
-        
+
         /// <summary>
         /// Initialisiert eine neue Instanz eines NumberGenerator-Objekts
         /// </summary>
@@ -65,7 +67,15 @@ namespace NumberGenerator.Logic
         /// <param name="observer">Der Beobachter, welcher benachricht werden möchte.</param>
         public void Attach(IObserver observer)
         {
-            throw new NotImplementedException();
+            if (observer == null)
+            {
+                throw new ArgumentNullException(nameof(observer));
+            }
+            if (_observers.Contains(observer))
+            {
+                throw new InvalidOperationException("Observer is already attached!");
+            }
+            _observers.Add(observer);
         }
 
         /// <summary>
@@ -74,7 +84,15 @@ namespace NumberGenerator.Logic
         /// <param name="observer">Der Beobachter, welcher nicht mehr benachrichtigt werden möchte</param>
         public void Detach(IObserver observer)
         {
-            throw new NotImplementedException();
+            if (observer == null)
+            {
+                throw new ArgumentNullException(nameof(observer));
+            }
+            if (!_observers.Contains(observer))
+            {
+                throw new InvalidOperationException("Observer was not attached!");
+            }
+            _observers.Remove(observer);
         }
 
         /// <summary>

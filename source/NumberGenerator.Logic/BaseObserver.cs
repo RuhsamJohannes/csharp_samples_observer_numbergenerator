@@ -12,6 +12,7 @@ namespace NumberGenerator.Logic
         #region Fields
 
         private readonly IObservable _numberGenerator;
+        private int _countOfNumbersToWaitFor;
 
         #endregion
 
@@ -26,7 +27,12 @@ namespace NumberGenerator.Logic
 
         public BaseObserver(IObservable numberGenerator, int countOfNumbersToWaitFor)
         {
-            throw new NotImplementedException();
+            _numberGenerator = numberGenerator;
+            if (countOfNumbersToWaitFor < 0)
+            {
+                throw new ArgumentException("Invalid Number => number >= 0");
+            }
+            _countOfNumbersToWaitFor = countOfNumbersToWaitFor;
         }
 
         #endregion
