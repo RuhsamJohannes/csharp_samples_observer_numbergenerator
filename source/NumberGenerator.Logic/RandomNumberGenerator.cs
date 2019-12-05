@@ -21,6 +21,8 @@ namespace NumberGenerator.Logic
         private const int RANDOM_MAX_VALUE = 1000;
 
         IList<IObserver> _observers = new List<IObserver>();
+        private int _delay;
+        private int _seed;
 
         #endregion
 
@@ -44,6 +46,7 @@ namespace NumberGenerator.Logic
         /// <param name="delay">Enthält die Zeit zw. zwei Generierungen in Millisekunden.</param>
         public RandomNumberGenerator(int delay) : this(delay, DEFAULT_SEED)
         {
+            _delay = delay;
         }
 
         /// <summary>
@@ -53,6 +56,8 @@ namespace NumberGenerator.Logic
         /// <param name="seed">Enthält die Initialisierung der Zufallszahlengenerierung.</param>
         public RandomNumberGenerator(int delay, int seed)
         {
+            _delay = delay;
+            _seed = seed;
         }
 
         #endregion
@@ -117,7 +122,17 @@ namespace NumberGenerator.Logic
         /// </summary>
         public void StartNumberGeneration()
         {
-            throw new NotImplementedException();
+            Random random = new Random();
+            while (_observers.Count > 0)
+            {
+                int newNumber = random.Next(RANDOM_MIN_VALUE, RANDOM_MAX_VALUE + 1);
+                foreach (IObserver observer in _observers)
+                {
+                    observer.OnNextNumber(newNumber);
+                }
+                Task.Delay(_delay).Wait();
+                Console.WriteLine("------------------------------");
+            }
         }
 
         #endregion

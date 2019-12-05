@@ -12,7 +12,6 @@ namespace NumberGenerator.Logic
         #region Fields
 
         private readonly IObservable _numberGenerator;
-        private int _countOfNumbersToWaitFor;
 
         #endregion
 
@@ -30,9 +29,10 @@ namespace NumberGenerator.Logic
             _numberGenerator = numberGenerator;
             if (countOfNumbersToWaitFor < 0)
             {
-                throw new ArgumentException("Invalid Number => number >= 0");
+                throw new ArgumentException("Invalid Number, Number is smaller than 0");
             }
-            _countOfNumbersToWaitFor = countOfNumbersToWaitFor;
+            CountOfNumbersToWaitFor = countOfNumbersToWaitFor;
+            _numberGenerator.Attach(this);
         }
 
         #endregion
@@ -57,7 +57,6 @@ namespace NumberGenerator.Logic
                 Console.ResetColor();
                 DetachFromNumberGenerator();
             }
-
         }
 
         #endregion
@@ -69,7 +68,7 @@ namespace NumberGenerator.Logic
 
         protected void DetachFromNumberGenerator()
         {
-            throw new NotImplementedException();
+            _numberGenerator.Detach(this);
         }
 
         #endregion
