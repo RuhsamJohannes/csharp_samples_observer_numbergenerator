@@ -9,6 +9,9 @@ namespace NumberGenerator.Logic
     {
         #region Fields
 
+        private int _countOfNumbersToWaitFor;
+        private int _countOfNumbersReceived = 0;
+
         #endregion
 
         #region Properties
@@ -31,7 +34,7 @@ namespace NumberGenerator.Logic
         /// <summary>
         /// Enthält den Durchschnitt der generierten Zahlen.
         /// </summary>
-        public int Avg => throw new NotImplementedException();
+        public int Avg => Sum / _countOfNumbersReceived;
 
         #endregion
 
@@ -39,7 +42,8 @@ namespace NumberGenerator.Logic
 
         public StatisticsObserver(IObservable numberGenerator, int countOfNumbersToWaitFor) : base(numberGenerator, countOfNumbersToWaitFor)
         {
-            throw new NotImplementedException();
+            _countOfNumbersToWaitFor = countOfNumbersToWaitFor;
+            Min = 999;
         }
 
         #endregion
@@ -48,12 +52,32 @@ namespace NumberGenerator.Logic
 
         public override string ToString()
         {
-            throw new NotImplementedException();
+            return ($"BaseObserver [CountOfNumbersReceived='{_countOfNumbersReceived}', CountOfNumbersToWaitFor='{_countOfNumbersToWaitFor}'] " +
+                $"=> StatisticsObserver [Min='{Min}', Max='{Max}', Sum='{Sum}', Avg='{Avg}']");
         }
 
         public override void OnNextNumber(int number)
         {
-            throw new NotImplementedException();
+            _countOfNumbersReceived++;
+
+            if (Min > number)
+            {
+                Min = number;
+            }
+            if (Max < number)
+            {
+                Max = number;
+            }
+
+            Sum += number;
+
+            if (_countOfNumbersReceived >= _countOfNumbersToWaitFor)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"   >> {this.GetType().Name}: Received '{CountOfNumbersReceived}' of '{CountOfNumbersToWaitFor}' => I am not interested in new numbers anymore => Detach().");
+                Console.ResetColor();
+                DetachFromNumberGenerator();
+            }
         }
 
         #endregion

@@ -29,7 +29,7 @@ namespace NumberGenerator.Logic
             _numberGenerator = numberGenerator;
             if (countOfNumbersToWaitFor < 0)
             {
-                throw new ArgumentException("Invalid Number, Number is smaller than 0");
+                throw new ArgumentException("Invalid Number, Number has to be greater 0");
             }
             CountOfNumbersToWaitFor = countOfNumbersToWaitFor;
             _numberGenerator.Attach(this);

@@ -122,16 +122,16 @@ namespace NumberGenerator.Logic
         /// </summary>
         public void StartNumberGeneration()
         {
-            Random random = new Random();
+            Random random = new Random(_seed);
             while (_observers.Count > 0)
             {
-                int newNumber = random.Next(RANDOM_MIN_VALUE, RANDOM_MAX_VALUE + 1);
-                foreach (IObserver observer in _observers)
+                int newNumber = random.Next(RANDOM_MIN_VALUE, RANDOM_MAX_VALUE);
+                for (int i = 0; i < _observers.Count; i++)
                 {
-                    observer.OnNextNumber(newNumber);
+                    _observers[i].OnNextNumber(newNumber);
                 }
                 Task.Delay(_delay).Wait();
-                Console.WriteLine("------------------------------");
+                Console.WriteLine($"NumberGenerator: Random Number gernerated: '{newNumber}'");
             }
         }
 
