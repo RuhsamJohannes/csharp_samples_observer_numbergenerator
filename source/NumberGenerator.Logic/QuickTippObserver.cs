@@ -26,7 +26,9 @@ namespace NumberGenerator.Logic
 
         public QuickTippObserver(IObservable numberGenerator)
         {
-            throw new NotImplementedException();
+            _numberGenerator = numberGenerator;
+            QuickTippNumbers = new List<int>();
+            _numberGenerator.Attach(this);
         }
 
         #endregion
@@ -35,17 +37,36 @@ namespace NumberGenerator.Logic
 
         public void OnNextNumber(int number)
         {
-            throw new NotImplementedException();
+            if (number >= 1 && number <= 45 && !QuickTippNumbers.Contains(number))
+            {
+                QuickTippNumbers.Add(number);
+            }
+            
+            if (QuickTippNumbers.Count >= 6)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"   >> {this.GetType().Name}: Got full a Quick-Tipp => I am not interested in new numbers anymore => Detach().");
+                Console.ResetColor();
+                DetachFromNumberGenerator();
+            }
+
+            CountOfNumbersReceived++;
         }
 
         public override string ToString()
         {
-            throw new NotImplementedException();
+            string nums = string.Empty;
+            QuickTippNumbers.Sort();
+            foreach (int num in QuickTippNumbers)
+            {
+                nums += Convert.ToString(num) + ", ";
+            }
+            return $"   >> {GetType().Name}: Recieved {CountOfNumbersReceived} numbers ==> Quick-Tipp is {nums.Remove(nums.Length-2)}.";
         }
 
         private void DetachFromNumberGenerator()
         {
-            throw new NotImplementedException();
+            _numberGenerator.Detach(this);
         }
 
         #endregion

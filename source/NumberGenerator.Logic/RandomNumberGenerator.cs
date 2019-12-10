@@ -106,7 +106,10 @@ namespace NumberGenerator.Logic
         /// <param name="number">Die generierte Zahl.</param>
         public void NotifyObservers(int number)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < _observers.Count; i++)
+            {
+                _observers[i].OnNextNumber(number);
+            }
         }
 
         #endregion
@@ -126,16 +129,12 @@ namespace NumberGenerator.Logic
             while (_observers.Count > 0)
             {
                 int newNumber = random.Next(RANDOM_MIN_VALUE, RANDOM_MAX_VALUE);
-                for (int i = 0; i < _observers.Count; i++)
-                {
-                    _observers[i].OnNextNumber(newNumber);
-                }
-                Task.Delay(_delay).Wait();
                 Console.WriteLine($"NumberGenerator: Random Number gernerated: '{newNumber}'");
+                NotifyObservers(newNumber);
+                Task.Delay(_delay).Wait();
             }
         }
 
         #endregion
     }
-
 }

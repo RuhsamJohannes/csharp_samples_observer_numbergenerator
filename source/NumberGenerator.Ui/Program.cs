@@ -17,11 +17,18 @@ namespace NumberGenerator.Ui
             RangeObserver rangeObserver = new RangeObserver(numberGenerator, 5, 200, 300);
             QuickTippObserver quickTippObserver = new QuickTippObserver(numberGenerator);
 
-
             // Nummerngenerierung starten
-            // Resultat ausgeben
-            throw new NotImplementedException();
+            numberGenerator.StartNumberGeneration();
 
+            // Resultat ausgeben
+            Console.WriteLine("\n-------------------------------Result-------------------------------");
+            Console.WriteLine($"   >> {statisticsObserver.GetType().Name}: Recieved {statisticsObserver.CountOfNumbersReceived} numbers " +
+                $"==> Min = '{statisticsObserver.Min}', Max = '{statisticsObserver.Max}', Sum = '{statisticsObserver.Sum}' Avg = '{statisticsObserver.Avg}'.");
+            Console.WriteLine(rangeObserver.ToString());
+            Console.WriteLine(quickTippObserver.ToString());
+            Console.WriteLine("--------------------------------------------------------------------");
+
+            Console.ReadKey();
         }
     }
 }

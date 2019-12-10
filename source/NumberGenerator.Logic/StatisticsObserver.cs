@@ -52,8 +52,7 @@ namespace NumberGenerator.Logic
 
         public override string ToString()
         {
-            return ($"BaseObserver [CountOfNumbersReceived='{_countOfNumbersReceived}', CountOfNumbersToWaitFor='{_countOfNumbersToWaitFor}'] " +
-                $"=> StatisticsObserver [Min='{Min}', Max='{Max}', Sum='{Sum}', Avg='{Avg}']");
+            return base.ToString() + $"=> StatisticsObserver [Min='{Min}', Max='{Max}', Sum='{Sum}', Avg='{Avg}']";
         }
 
         public override void OnNextNumber(int number)
@@ -71,13 +70,7 @@ namespace NumberGenerator.Logic
 
             Sum += number;
 
-            if (_countOfNumbersReceived >= _countOfNumbersToWaitFor)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"   >> {this.GetType().Name}: Received '{CountOfNumbersReceived}' of '{CountOfNumbersToWaitFor}' => I am not interested in new numbers anymore => Detach().");
-                Console.ResetColor();
-                DetachFromNumberGenerator();
-            }
+            base.OnNextNumber(number);
         }
 
         #endregion
