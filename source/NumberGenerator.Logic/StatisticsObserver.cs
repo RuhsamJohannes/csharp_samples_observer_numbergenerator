@@ -55,7 +55,7 @@ namespace NumberGenerator.Logic
             return base.ToString() + $"=> StatisticsObserver [Min='{Min}', Max='{Max}', Sum='{Sum}', Avg='{Avg}']";
         }
 
-        public override void OnNextNumber(int number)
+        public override void OnNextNumber(object sender, int number)
         {
             _countOfNumbersReceived++;
 
@@ -70,7 +70,7 @@ namespace NumberGenerator.Logic
 
             Sum += number;
 
-            base.OnNextNumber(number);
+            base.OnNextNumber(sender, number);
         }
 
         #endregion

@@ -23,8 +23,7 @@ namespace NumberGenerator.Logic
         private int _delay;
         private int _seed;
 
-        public delegate void NumberChangedHandler (int newNumber);
-        public NumberChangedHandler NumberChanged { get; set; }
+        public event EventHandler<int> NumberChanged;
 
         #endregion
 
@@ -74,7 +73,7 @@ namespace NumberGenerator.Logic
         /// <param name="number">Die generierte Zahl.</param>
         public void NotifyObservers(int number)
         {
-            NumberChanged?.Invoke(number);
+            NumberChanged(this, number);
         }
 
         #endregion

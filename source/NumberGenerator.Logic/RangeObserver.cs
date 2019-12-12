@@ -56,9 +56,9 @@ namespace NumberGenerator.Logic
             return $"   >> {this.GetType().Name}: Recieved {CountOfNumbersReceived} numbers ==> There were '{NumbersInRange}' numbers between '{LowerRange}'-'{UpperRange}'.";
         }
 
-        public override void OnNextNumber(int number)
+        public override void OnNextNumber(object sender, int number)
         {
-            base.OnNextNumber(number);
+            base.OnNextNumber(sender, number);
 
             if (number >= LowerRange && number <= UpperRange)
             {

@@ -35,7 +35,7 @@ namespace NumberGenerator.Logic
 
         #region Methods
 
-        public void OnNextNumber(int number)
+        public void OnNextNumber(object sender, int number)
         {
             if (number >= 1 && number <= 45 && !QuickTippNumbers.Contains(number))
             {
