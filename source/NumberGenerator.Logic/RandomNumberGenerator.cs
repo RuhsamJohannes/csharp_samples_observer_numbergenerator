@@ -10,7 +10,7 @@ namespace NumberGenerator.Logic
     /// Zwischen der Generierung der einzelnen Zufallsnzahlen erfolgt jeweils eine Pause.
     /// Die Generierung erfolgt so lange, solange Beobachter registriert sind.
     /// </summary>
-    public class RandomNumberGenerator : IObservable
+    public class RandomNumberGenerator
     {
         #region Constants
 
@@ -20,9 +20,11 @@ namespace NumberGenerator.Logic
         private const int RANDOM_MIN_VALUE = 1;
         private const int RANDOM_MAX_VALUE = 1000;
 
-        IList<IObserver> _observers = new List<IObserver>();
         private int _delay;
         private int _seed;
+
+        public delegate void NumberChangedHandler (int newNumber);
+        public NumberChangedHandler NumberChanged { get; set; }
 
         #endregion
 
@@ -67,49 +69,12 @@ namespace NumberGenerator.Logic
         #region IObservable Members
 
         /// <summary>
-        /// Fügt einen Beobachter hinzu.
-        /// </summary>
-        /// <param name="observer">Der Beobachter, welcher benachricht werden möchte.</param>
-        public void Attach(IObserver observer)
-        {
-            if (observer == null)
-            {
-                throw new ArgumentNullException(nameof(observer));
-            }
-            if (_observers.Contains(observer))
-            {
-                throw new InvalidOperationException("Observer is already attached!");
-            }
-            _observers.Add(observer);
-        }
-
-        /// <summary>
-        /// Entfernt einen Beobachter.
-        /// </summary>
-        /// <param name="observer">Der Beobachter, welcher nicht mehr benachrichtigt werden möchte</param>
-        public void Detach(IObserver observer)
-        {
-            if (observer == null)
-            {
-                throw new ArgumentNullException(nameof(observer));
-            }
-            if (!_observers.Contains(observer))
-            {
-                throw new InvalidOperationException("Observer was not attached!");
-            }
-            _observers.Remove(observer);
-        }
-
-        /// <summary>
         /// Benachrichtigt die registrierten Beobachter, dass eine neue Zahl generiert wurde.
         /// </summary>
         /// <param name="number">Die generierte Zahl.</param>
         public void NotifyObservers(int number)
         {
-            for (int i = 0; i < _observers.Count; i++)
-            {
-                _observers[i].OnNextNumber(number);
-            }
+            NumberChanged?.Invoke(number);
         }
 
         #endregion
@@ -126,7 +91,7 @@ namespace NumberGenerator.Logic
         public void StartNumberGeneration()
         {
             Random random = new Random(_seed);
-            while (_observers.Count > 0)
+            while (NumberChanged != null)
             {
                 int newNumber = random.Next(RANDOM_MIN_VALUE, RANDOM_MAX_VALUE);
                 Console.WriteLine($"NumberGenerator: Random Number gernerated: '{newNumber}'");
